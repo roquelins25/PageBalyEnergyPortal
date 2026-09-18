@@ -53,9 +53,11 @@
             border-radius: 10px;
         }
 
-        /* Sidebar deslizante no mobile */
+        /* Sidebar deslizante no mobile / retrátil no desktop */
         #sidebar {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s ease;
         }
 
         #sidebar-overlay {
@@ -93,24 +95,25 @@
     <!--
         MOBILE  : fixed, começa fora da tela (-translate-x-full)
                   desliza para dentro quando aberto (translate-x-0)
-        DESKTOP : lg:relative lg:translate-x-0 — sempre visível
+        DESKTOP : fixed, recolhida (w-20, só ícones) por padrão;
+                  ao passar o mouse (hover) expande para w-64 mostrando os rótulos
     -->
     <aside
         id="sidebar"
-        class="fixed top-0 left-0 z-30 h-full w-72 -translate-x-full
-               lg:relative lg:w-64 lg:translate-x-0
+        class="group/side fixed top-0 left-0 z-30 h-full w-72 -translate-x-full
+               lg:w-20 lg:hover:w-64 lg:hover:shadow-2xl lg:translate-x-0
                bg-brand-dark flex flex-col border-r border-white/5"
     >
         <!-- Logo + botão fechar -->
         <div class="p-5 flex items-center gap-3 border-b border-white/5">
             <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
                 <img
-                    src="https://tiermaker.com/images/media/hero_images/2024/17308932/baly-rankeado-17308932/173089321720907967.png"
+                    src="{{ url_for('static', filename='img/logo-branca-maior.png') }}"
                     alt="Baly"
                     class="w-full h-full object-contain p-1"
                 />
             </div>
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 lg:hidden lg:group-hover/side:block">
                 <p class="text-white font-bold leading-none truncate">Baly Energy</p>
                 <p class="text-white/40 text-xs uppercase tracking-widest mt-0.5">BI Portal</p>
             </div>
@@ -125,15 +128,15 @@
         </div>
 
         <!-- NAV -->
-        <nav class="flex-1 px-3 py-4 space-y-1 sidebar-scroll overflow-y-auto">
+        <nav class="flex-1 px-3 py-4 space-y-1 sidebar-scroll overflow-y-auto overflow-x-hidden">
 
             <div>
                 <button class="accordion-toggle w-full flex items-center gap-2 px-3 py-2.5
                                text-xs font-bold uppercase text-white/50
                                hover:bg-white/5 rounded-lg transition-colors">
                     <span class="material-symbols-outlined text-[18px] text-primary shrink-0">flag</span>
-                    <span class="flex-1 text-left">01. Financeiro</span>
-                    <span class="material-symbols-outlined arrow text-[18px]">expand_more</span>
+                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">01. Financeiro</span>
+                    <span class="material-symbols-outlined arrow text-[18px] lg:hidden lg:group-hover/side:inline">expand_more</span>
     
                 </button>
 
@@ -144,7 +147,7 @@
                               text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-src="https://app.powerbi.com/view?r=eyJrIjoiYzIwNTAwNGEtZjI5NS00N2RlLWIyMWMtYTRiN2ZhYmVlNmFhIiwidCI6IjYzOWYzM2ZjLTA5M2MtNGJlNy1hZDBjLTcwMDNmNzRjOWI5NiJ9">
                         <span class="material-symbols-outlined text-[18px]">analytics</span>
-                        <span class="text-sm font-semibold">Financeiro</span>
+                        <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Financeiro</span>
                     </a>
 
                     <!-- Production — em desenvolvimento -->
@@ -153,8 +156,8 @@
                            class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                   text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">factory</span>
-                            <span class="text-sm">Production</span>
-                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Production</span>
+                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                          text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
                                 Soon
                             </span>
@@ -173,8 +176,8 @@
                            class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                   text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">stacked_bar_chart</span>
-                            <span class="text-sm">PO Approvals</span>
-                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">PO Approvals</span>
+                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                          text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
                                 Soon
                             </span>
@@ -195,8 +198,8 @@
                                text-xs font-bold uppercase text-white/50
                                hover:bg-white/5 rounded-lg transition-colors">
                     <span class="material-symbols-outlined text-[18px] text-primary shrink-0">flag</span>
-                    <span class="flex-1 text-left">02. Comercial</span>
-                    <span class="material-symbols-outlined arrow text-[18px]">expand_more</span>
+                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">02. Comercial</span>
+                    <span class="material-symbols-outlined arrow text-[18px] lg:hidden lg:group-hover/side:inline">expand_more</span>
                 </button>
 
                 <div class="accordion-content hidden mt-1 ml-2 space-y-0.5">
@@ -205,7 +208,7 @@
                               text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-src="https://app.powerbi.com/reportEmbed?reportId=d5dc7877-f791-455a-94cb-217ec5b7049d&autoAuth=true&ctid=639f33fc-093c-4be7-ad0c-7003f74c9b96">
                         <span class="material-symbols-outlined text-[18px]">analytics</span>
-                        <span class="text-sm font-semibold">Comercial</span>
+                        <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Comercial</span>
                     </a>
                 </div>
                 
@@ -217,8 +220,8 @@
                                text-xs font-bold uppercase text-white/50
                                hover:bg-white/5 rounded-lg transition-colors">
                     <span class="material-symbols-outlined text-[18px] text-primary shrink-0">flag</span>
-                    <span class="flex-1 text-left">03. Logistica</span>
-                    <span class="material-symbols-outlined arrow text-[18px]">expand_more</span>
+                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">03. Logistica</span>
+                    <span class="material-symbols-outlined arrow text-[18px] lg:hidden lg:group-hover/side:inline">expand_more</span>
                 </button>
 
                 <div class="accordion-content hidden mt-1 ml-2 space-y-0.5">
@@ -227,8 +230,8 @@
                         class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                 text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">factory</span>
-                            <span class="text-sm">Production</span>
-                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Production</span>
+                            <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                         text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
                                 Soon
                             </span>
@@ -250,8 +253,8 @@
                                text-xs font-bold uppercase text-white/50
                                hover:bg-white/5 rounded-lg transition-colors">
                     <span class="material-symbols-outlined text-[18px] text-primary shrink-0">flag</span>
-                    <span class="flex-1 text-left">04. Contabilidade</span>
-                    <span class="material-symbols-outlined arrow text-[18px]">expand_more</span>
+                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">04. Contabilidade</span>
+                    <span class="material-symbols-outlined arrow text-[18px] lg:hidden lg:group-hover/side:inline">expand_more</span>
                 </button>
 
                 <div class="accordion-content hidden mt-1 ml-2 space-y-0.5">
@@ -260,7 +263,7 @@
                               text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-src="https://app.powerbi.com/view?r=eyJrIjoiNWExMGIzZDYtYWYyOS00NTA1LTlhNGYtNGUzMzA5NmNkZjFhIiwidCI6IjYzOWYzM2ZjLTA5M2MtNGJlNy1hZDBjLTcwMDNmNzRjOWI5NiJ9">
                         <span class="material-symbols-outlined text-[18px]">analytics</span>
-                        <span class="text-sm font-semibold">Controle de ICMS ST</span>
+                        <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Controle de ICMS ST</span>
                     </a>
                 </div>
             </div>
@@ -271,20 +274,19 @@
         <div class="p-4 border-t border-white/5">
             <a
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg
-                       text-primary hover:bg-primary/10 transition-colors
-                       hidden group-hover:block"
+                       text-primary hover:bg-primary/10 transition-colors"
                 href="{{ url_for('main.development_entry') }}"
                 target="_blank"
                 rel="noopener noreferrer"
             >
                 <span class="material-symbols-outlined text-[18px]">terminal</span>
-                <span class="text-sm font-bold tracking-tight">Development Area</span>
+                <span class="text-sm font-bold tracking-tight lg:hidden lg:group-hover/side:inline">Development Area</span>
             </a>
         </div>
     </aside>
 
     <!-- ── MAIN ──────────────────────────────────────────── -->
-    <main class="flex-1 min-w-0 flex flex-col overflow-hidden">
+    <main class="flex-1 min-w-0 flex flex-col overflow-hidden lg:ml-20">
 
         <header class="h-16 shrink-0 bg-white dark:bg-brand-dark/50
                         border-b border-slate-200 dark:border-white/5
@@ -304,7 +306,7 @@
             <!-- Logo mobile/tablet -->
             <div class="flex items-center gap-2 lg:hidden">
                 <img
-                    src="https://hevogroup.es/wp-content/uploads/2025/04/Global-Eggs_-logo.png"
+                    src="{{ url_for('static', filename='img/logo-branca-maior.png') }}"
                     alt="Baly Energy"
                     class="w-7 h-7 object-contain"
                 />
