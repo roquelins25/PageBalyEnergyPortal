@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="pt-BR" class="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +34,21 @@
     </script>
 
     <style type="text/tailwindcss">
+        /* Fonte de ícones: sem font-family o texto do ligature (ex.: "analytics")
+           aparece como palavra comum e quebra dentro da sidebar recolhida */
         .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: 'liga';
             font-size: 20px;
         }
 
@@ -150,43 +164,43 @@
                         <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Financeiro</span>
                     </a>
 
-                    <!-- Production — em desenvolvimento -->
+                    <!-- Produção — em desenvolvimento -->
                     <div class="relative group">
                         <a href="#"
                            class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                   text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">factory</span>
-                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Production</span>
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Produção</span>
                             <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                          text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
-                                Soon
+                                Em breve
                             </span>
                         </a>
                         <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2
                                      hidden group-hover:block
                                      whitespace-nowrap rounded-md bg-zinc-900 border border-white/10
                                      px-3 py-1.5 text-xs text-white shadow-xl z-50">
-                            in approval 🚧
+                            em aprovação 🚧
                         </span>
                     </div>
 
-                    <!-- PO Approvals — em desenvolvimento -->
+                    <!-- Aprovações de PO — em desenvolvimento -->
                     <div class="relative group">
                         <a href="#"
                            class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                   text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">stacked_bar_chart</span>
-                            <span class="text-sm lg:hidden lg:group-hover/side:inline">PO Approvals</span>
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Aprovações de PO</span>
                             <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                          text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
-                                Soon
+                                Em breve
                             </span>
                         </a>
                         <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2
                                      hidden group-hover:block
                                      whitespace-nowrap rounded-md bg-zinc-900 border border-white/10
                                      px-3 py-1.5 text-xs text-white shadow-xl z-50">
-                            in approval 🚧
+                            em aprovação 🚧
                         </span>
                     </div>
                 </div>
@@ -214,13 +228,13 @@
                 
             </div>
 
-            <!-- Logistica -->
+            <!-- Logística -->
             <div>
                 <button class="accordion-toggle w-full flex items-center gap-2 px-3 py-2.5
                                text-xs font-bold uppercase text-white/50
                                hover:bg-white/5 rounded-lg transition-colors">
                     <span class="material-symbols-outlined text-[18px] text-primary shrink-0">flag</span>
-                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">03. Logistica</span>
+                    <span class="flex-1 text-left lg:hidden lg:group-hover/side:inline">03. Logística</span>
                     <span class="material-symbols-outlined arrow text-[18px] lg:hidden lg:group-hover/side:inline">expand_more</span>
                 </button>
 
@@ -230,10 +244,10 @@
                         class="nav-btn dev-disabled flex items-center gap-3 px-3 py-2.5 rounded-lg
                                 text-white/30 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">factory</span>
-                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Production</span>
+                            <span class="text-sm lg:hidden lg:group-hover/side:inline">Produção</span>
                             <span class="ml-auto text-[10px] font-bold uppercase tracking-wider lg:hidden lg:group-hover/side:inline-block
                                         text-amber-400/70 bg-amber-400/10 px-1.5 py-0.5 rounded">
-                                Soon
+                                Em breve
                             </span>
                         </a>
 
@@ -241,7 +255,7 @@
                                     hidden group-hover:block
                                     whitespace-nowrap rounded-md bg-zinc-900 border border-white/10
                                     px-3 py-1.5 text-xs text-white shadow-xl z-50">
-                            in approval 🚧
+                            em aprovação 🚧
                         </span>
                     </div>
                 </div>
@@ -293,12 +307,19 @@
                         <span class="material-symbols-outlined text-[18px]">analytics</span>
                         <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Preços de Venda e Lucratividade</span>
                     </a>
-                                        <a href="#"
+                    <a href="#"
                        class="nav-btn flex items-center gap-3 px-3 py-2.5 rounded-lg
                               text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-src="https://app.powerbi.com/reportEmbed?reportId=8a7bb3f1-4845-4886-86c5-a3bfe2dfdadf&autoAuth=true&ctid=639f33fc-093c-4be7-ad0c-7003f74c9b96">
                         <span class="material-symbols-outlined text-[18px]">analytics</span>
                         <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">DRE Cliente</span>
+                    </a>
+                    <a href="#"
+                       class="nav-btn flex items-center gap-3 px-3 py-2.5 rounded-lg
+                              text-white/70 hover:bg-white/5 hover:text-white transition-colors"
+                       data-src="https://app.powerbi.com/reportEmbed?reportId=6f1dcc90-a3f7-44c2-bdb5-6384966da9f7&autoAuth=true&ctid=639f33fc-093c-4be7-ad0c-7003f74c9b96">
+                        <span class="material-symbols-outlined text-[18px]">analytics</span>
+                        <span class="text-sm font-semibold lg:hidden lg:group-hover/side:inline">Devoluções</span>
                     </a>
                 </div>
                 
@@ -306,7 +327,7 @@
 
         </nav>
 
-        <!-- Development Area — desativado temporariamente
+        <!-- Área de Desenvolvimento — desativado temporariamente
         <div class="p-4 border-t border-white/5">
             <a
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg
@@ -316,7 +337,7 @@
                 rel="noopener noreferrer"
             >
                 <span class="material-symbols-outlined text-[18px]">terminal</span>
-                <span class="text-sm font-bold tracking-tight lg:hidden lg:group-hover/side:inline">Development Area</span>
+                <span class="text-sm font-bold tracking-tight lg:hidden lg:group-hover/side:inline">Área de Desenvolvimento</span>
             </a>
         </div>
         -->

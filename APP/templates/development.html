@@ -34,7 +34,21 @@
     </script>
 
     <style type="text/tailwindcss">
+        /* Fonte de ícones: sem font-family o texto do ligature (ex.: "analytics")
+           aparece como palavra comum e quebra dentro da sidebar recolhida */
         .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: 'liga';
             font-size: 20px;
         }
 
@@ -259,17 +273,15 @@
 
         <!-- CONTENT -->
         <!--
-            MOBILE  : p-2 (máximo aproveitamento de tela)
-            TABLET  : sm:p-4
-            DESKTOP : lg:p-6
+            Sem padding nem borda: o dashboard ocupa toda a área disponível
+            abaixo do header, em qualquer tamanho de tela.
         -->
-        <div class="flex-1 p-2 sm:p-4 lg:p-6 overflow-hidden">
-            <div class="h-full rounded-lg border border-slate-200 dark:border-black/5
-                        bg-black dark:bg-brand-dark/50 overflow-hidden">
+        <div class="flex-1 min-h-0 overflow-hidden">
+            <div class="h-full w-full bg-black overflow-hidden">
                 <iframe
                     id="dashboardFrame"
                     src="https://app.powerbi.com/view?r=eyJrIjoiZTBkZTU4ZTMtOTc3My00NmE1LTllM2QtNGJjZjE5YWUwZDU1IiwidCI6ImE4YTc5ZmJlLTQ1MzktNGRhYi1iYjAzLTdhMGZiNDJhNGMzZSIsImMiOjN9"
-                    class="w-full h-full min-h-[420px]"
+                    class="block w-full h-full"
                     frameborder="0"
                     allowfullscreen
                 ></iframe>
