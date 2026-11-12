@@ -282,7 +282,8 @@
             { id: "po", label: "Aprovações de PO", soon: true }
         ] },
         { id: "com", name: "Comercial", items: [
-            { id: "comercial", label: "Comercial", src: EMBED + "d5dc7877-f791-455a-94cb-217ec5b7049d" + TENANT }
+            { id: "comercial-externo", label: "Comercial Externo", src: EMBED + "d5dc7877-f791-455a-94cb-217ec5b7049d" + TENANT },
+            { id: "comercial-interno", label: "Comercial Interno", src: EMBED + "412922e4-038a-40d0-8c29-baf9199bedf2" + TENANT }
         ] },
         { id: "log", name: "Logística", items: [
             { id: "producao-log", label: "Produção", soon: true }
@@ -301,8 +302,8 @@
 
     var state = {
         q: "",
-        active: "comercial",           // mesmo relatório que o portal abria por padrão
-        tabs: ["comercial"],
+        active: "comercial-externo",           // mesmo relatório que o portal abria por padrão
+        tabs: ["comercial-externo"],
         open: { com: true }
     };
 
