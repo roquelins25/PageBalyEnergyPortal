@@ -81,6 +81,9 @@
         .group-btn:hover { background: #1F1E1A; }
         .group-btn .name { flex: 1; }
         .group-btn .count { font-size: 11px; color: var(--mut-dark); }
+        .ico { flex: 0 0 auto; color: var(--mut-dark); display: flex; }
+        .group-btn .ico { color: var(--yellow); }
+        .item.active .ico { color: var(--yellow); }
         .group-btn .chev { color: var(--mut-dark); transition: transform .2s; }
         .group.open > .group-btn .chev { transform: rotate(180deg); }
 
@@ -368,6 +371,8 @@
     }
 
     var CHEV = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    var FOLDER = '<svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>';
+    var REPORT = '<svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 16V10M12 16V5M17 16v-7"/></svg>';
     var XICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
     // ── Render: sidebar ──
@@ -380,6 +385,7 @@
 
         function itemBtn(it) {
             var b = el("button", "item" + (it.soon ? " soon" : "") + (state.active === it.id ? " active" : ""));
+            b.insertAdjacentHTML("beforeend", REPORT);
             b.appendChild(el("span", "label", it.label));
             if (it.soon) b.appendChild(el("span", "pill", "Em breve"));
             b.appendChild(el("span", "dot"));
@@ -413,6 +419,7 @@
 
             var btn = el("button", "group-btn");
             btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            btn.insertAdjacentHTML("beforeend", FOLDER);
             btn.appendChild(el("span", "name", a.name));
             btn.appendChild(el("span", "count", String(countReports(a.items))));
             btn.insertAdjacentHTML("beforeend", CHEV);
@@ -432,6 +439,7 @@
 
                 var sb = el("button", "sub-btn");
                 sb.setAttribute("aria-expanded", subOpen ? "true" : "false");
+                sb.insertAdjacentHTML("beforeend", FOLDER);
                 sb.appendChild(el("span", "name", sub.name));
                 sb.appendChild(el("span", "count", String(sub.items.length)));
                 sb.insertAdjacentHTML("beforeend", CHEV);
