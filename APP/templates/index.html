@@ -82,7 +82,7 @@
         .group-btn .name { flex: 1; }
         .group-btn .count { font-size: 11px; color: var(--mut-dark); }
         .group-btn .chev { color: var(--mut-dark); transition: transform .2s; }
-        .group.open .chev { transform: rotate(180deg); }
+        .group.open > .group-btn .chev { transform: rotate(180deg); }
 
         .group-items {
             display: none; flex-direction: column; gap: 2px;
@@ -90,6 +90,26 @@
             border-left: 1px solid var(--line-dark);
         }
         .group.open .group-items { display: flex; }
+
+        /* Subpastas (segundo nível) */
+        .subgroup { display: flex; flex-direction: column; }
+        .sub-btn {
+            width: 100%; display: flex; align-items: center; gap: 8px;
+            min-height: 36px; padding: 0 10px; border: 0; border-radius: 8px;
+            background: transparent; color: var(--txt-dark);
+            font-size: 13px; font-weight: 600; text-align: left;
+        }
+        .sub-btn:hover { background: #1F1E1A; }
+        .sub-btn .name { flex: 1; }
+        .sub-btn .count { font-size: 11px; color: var(--mut-dark); }
+        .sub-btn .chev { color: var(--mut-dark); transition: transform .2s; }
+        .subgroup.open > .sub-btn .chev { transform: rotate(180deg); }
+        .sub-items {
+            display: none; flex-direction: column; gap: 2px;
+            margin: 2px 0 6px 10px; padding-left: 10px;
+            border-left: 1px solid var(--line-dark);
+        }
+        .subgroup.open .sub-items { display: flex; }
 
         .item {
             display: flex; align-items: center; gap: 8px;
@@ -282,8 +302,13 @@
             { id: "po", label: "Aprovações de PO", soon: true }
         ] },
         { id: "com", name: "Comercial", items: [
-            { id: "comercial-externo", label: "Comercial Externo", src: EMBED + "d5dc7877-f791-455a-94cb-217ec5b7049d" + TENANT },
-            { id: "comercial-interno", label: "Comercial Interno", src: EMBED + "412922e4-038a-40d0-8c29-baf9199bedf2" + TENANT }
+            { id: "com-ext", name: "Comercial Externo", items: [
+                { id: "comercial-externo", label: "Comercial Externo", src: EMBED + "d5dc7877-f791-455a-94cb-217ec5b7049d" + TENANT }
+                { id: "comercial-externo", label: "DRE Cliente", src: EMBED + "890546d9-b385-4ecc-b374-cd05d49f7c19" + TENANT }
+            ] },
+            { id: "com-int", name: "Comercial Interno", items: [
+                { id: "comercial-interno", label: "Comercial Interno", src: EMBED + "412922e4-038a-40d0-8c29-baf9199bedf2" + TENANT }
+            ] }
         ] },
         { id: "log", name: "Logística", items: [
             { id: "producao-log", label: "Produção", soon: true }
@@ -304,19 +329,35 @@
         q: "",
         active: "comercial-externo",           // mesmo relatório que o portal abria por padrão
         tabs: ["comercial-externo"],
-        open: { com: true }
+        open: { com: true, "com-ext": true }
     };
 
     var $ = function (id) { return document.getElementById(id); };
     var nav = $("nav"), tabsEl = $("tabs"), iframe = $("dashboardFrame"), frame = $("frame");
 
+    function isSub(x) { return !!x.items; }
+
     function find(id) {
         for (var i = 0; i < AREAS.length; i++) {
-            for (var j = 0; j < AREAS[i].items.length; j++) {
-                if (AREAS[i].items[j].id === id) return { area: AREAS[i], item: AREAS[i].items[j] };
+            var a = AREAS[i];
+            for (var j = 0; j < a.items.length; j++) {
+                var x = a.items[j];
+                if (isSub(x)) {
+                    for (var k = 0; k < x.items.length; k++) {
+                        if (x.items[k].id === id) return { area: a, sub: x, item: x.items[k] };
+                    }
+                } else if (x.id === id) {
+                    return { area: a, sub: null, item: x };
+                }
             }
         }
         return null;
+    }
+
+    function countReports(list) {
+        var n = 0;
+        list.forEach(function (x) { n += isSub(x) ? x.items.length : 1; });
+        return n;
     }
 
     function el(tag, cls, text) {
@@ -335,12 +376,37 @@
         var shown = 0;
         nav.innerHTML = "";
 
-        AREAS.forEach(function (a) {
-            var items = a.items.filter(function (it) {
-                return !q || it.label.toLowerCase().indexOf(q) !== -1;
+        function matches(it) { return !q || it.label.toLowerCase().indexOf(q) !== -1; }
+
+        function itemBtn(it) {
+            var b = el("button", "item" + (it.soon ? " soon" : "") + (state.active === it.id ? " active" : ""));
+            b.appendChild(el("span", "label", it.label));
+            if (it.soon) b.appendChild(el("span", "pill", "Em breve"));
+            b.appendChild(el("span", "dot"));
+            if (it.soon) b.setAttribute("aria-disabled", "true");
+            b.addEventListener("click", function () {
+                if (it.soon) return;
+                openReport(it.id);
+                closeSidebar();
             });
-            if (q && items.length === 0) return;
-            shown += items.length;
+            return b;
+        }
+
+        AREAS.forEach(function (a) {
+            // Monta a lista filtrada: relatórios diretos e subpastas (com seus relatórios filtrados)
+            var entries = [];
+            a.items.forEach(function (x) {
+                if (isSub(x)) {
+                    var subItems = x.items.filter(matches);
+                    if (!q || subItems.length) entries.push({ sub: x, items: subItems });
+                } else if (matches(x)) {
+                    entries.push({ item: x });
+                }
+            });
+            var visible = 0;
+            entries.forEach(function (e) { visible += e.sub ? e.items.length : 1; });
+            if (q && visible === 0) return;
+            shown += visible;
 
             var isOpen = q ? true : !!state.open[a.id];
             var g = el("div", "group" + (isOpen ? " open" : ""));
@@ -348,7 +414,7 @@
             var btn = el("button", "group-btn");
             btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
             btn.appendChild(el("span", "name", a.name));
-            btn.appendChild(el("span", "count", String(a.items.length)));
+            btn.appendChild(el("span", "count", String(countReports(a.items))));
             btn.insertAdjacentHTML("beforeend", CHEV);
             btn.addEventListener("click", function () {
                 state.open[a.id] = !state.open[a.id];
@@ -357,18 +423,28 @@
             g.appendChild(btn);
 
             var list = el("div", "group-items");
-            items.forEach(function (it) {
-                var b = el("button", "item" + (it.soon ? " soon" : "") + (state.active === it.id ? " active" : ""));
-                b.appendChild(el("span", "label", it.label));
-                if (it.soon) b.appendChild(el("span", "pill", "Em breve"));
-                b.appendChild(el("span", "dot"));
-                if (it.soon) b.setAttribute("aria-disabled", "true");
-                b.addEventListener("click", function () {
-                    if (it.soon) return;
-                    openReport(it.id);
-                    closeSidebar();
+            entries.forEach(function (e) {
+                if (!e.sub) { list.appendChild(itemBtn(e.item)); return; }
+
+                var sub = e.sub;
+                var subOpen = q ? true : !!state.open[sub.id];
+                var sg = el("div", "subgroup" + (subOpen ? " open" : ""));
+
+                var sb = el("button", "sub-btn");
+                sb.setAttribute("aria-expanded", subOpen ? "true" : "false");
+                sb.appendChild(el("span", "name", sub.name));
+                sb.appendChild(el("span", "count", String(sub.items.length)));
+                sb.insertAdjacentHTML("beforeend", CHEV);
+                sb.addEventListener("click", function () {
+                    state.open[sub.id] = !state.open[sub.id];
+                    renderNav();
                 });
-                list.appendChild(b);
+                sg.appendChild(sb);
+
+                var sl = el("div", "sub-items");
+                e.items.forEach(function (it) { sl.appendChild(itemBtn(it)); });
+                sg.appendChild(sl);
+                list.appendChild(sg);
             });
             g.appendChild(list);
             nav.appendChild(g);
@@ -398,7 +474,7 @@
     // ── Render: cabeçalho + iframe ──
     function renderHeader() {
         var cur = state.active ? find(state.active) : null;
-        $("crumb").textContent = cur ? cur.area.name : "Portal BI";
+        $("crumb").textContent = cur ? (cur.sub ? cur.area.name + " › " + cur.sub.name : cur.area.name) : "Portal BI";
         $("title").textContent = cur ? cur.item.label : "Selecione um relatório";
         frame.classList.toggle("is-empty", !cur);
         var src = cur ? cur.item.src : "about:blank";
@@ -416,6 +492,7 @@
         if (state.tabs.indexOf(id) === -1) state.tabs.push(id);
         state.active = id;
         state.open[f.area.id] = true;
+        if (f.sub) state.open[f.sub.id] = true;
         render();
     }
 
